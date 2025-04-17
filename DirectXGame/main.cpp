@@ -1,58 +1,49 @@
-//#include <Windows.h>
+#include <Windows.h>
 #pragma once
 #include "KamataEngine.h"
 using namespace KamataEngine;
 #include "GameScene.h"
 
-//ゲームシーン
-class Gamescene
-{
-
-};
 
 // Windowsアプリでのエントリーポイント(main関数)
-int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) { 
+int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
+    // エンジンの初期化
+    KamataEngine::Initialize(L"GC2D_04_オガワ_タクマ_AL3");
+ 
+    // DirectXCommonインスタンスの取得
+    DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 
-//エンジンの初期化	
-KamataEngine::Initialize(L"GC2D_04_オガワ_タクマ_AL3");
+    // ゲームシーンのインスタンス生成
+    GameScene* gameScene = new GameScene();
 
-//DirectXcommonインスタンスの取得
-DirectXCommon* dxCommon = DirectXCommon::GetInstance();
+    // ゲームシーンの初期化
+    gameScene->Initialize();
 
-//ゲームシーンのインスタンス生成
-GameScene* gameScene = new GameScene();
+    // メインループ
+    while (true) {
+        // エンジンの更新
+        if (KamataEngine::Update()) {
+            break;
+        }
 
-//ゲームシーンの初期化
-gameScene->Initialize();
+        // ゲームシーンの更新
+        gameScene->Update();
 
-//ゲームシーンの解放
+        // 描画開始
+        dxCommon->PreDraw();
 
+        // ゲームシーンの描画
+        gameScene->Draw();
 
-//nullptrの代入
-gameScene = nullptr;
+        // 描画終了
+        dxCommon->PostDraw();
+    }
 
-	//メインループ
-	while (true) {
-		//エンジンの更新
-		if (KamataEngine::Update()) {
-			break;
-		}
+    // ゲームシーンの解放
+    delete gameScene;
+    gameScene = nullptr;
 
-		//ゲームシーンの更新
-		gameScene->Update();
-
-		//描画開始
-		dxCommon->PreDraw();
-
-		//ゲームシーンの描画
-		gameScene->Draw();
-
-		//描画終了
-		dxCommon->PostDraw();
-	}
-	delete gameScene;
-
-//エンジンの終了処理
-KamataEngine::Finalize();	
-	return 0;
+    // エンジンの終了処理
+    KamataEngine::Finalize();
+    return 0;
 }
