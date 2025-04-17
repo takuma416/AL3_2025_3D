@@ -26,7 +26,7 @@ GameScene* gameScene = new GameScene();
 gameScene->Initialize();
 
 //ゲームシーンの解放
-delete gameScene;
+
 
 //nullptrの代入
 gameScene = nullptr;
@@ -50,6 +50,7 @@ gameScene = nullptr;
 		//描画終了
 		dxCommon->PostDraw();
 	}
+	delete gameScene;
 
 //エンジンの終了処理
 KamataEngine::Finalize();	
